@@ -2,7 +2,7 @@ import scipy
 import numpy
 from scipy.spatial import distance
 
-class DBSCAN:
+class Dbscan:
     def __init__(self, arr = None, dist = 0, minp = 0, item_len =0,
                  labels_ = None, clusters = None):
         return
@@ -18,6 +18,8 @@ class DBSCAN:
         self.item_len = len(arr[0])
 
         start_none = [None] * len(self.arr)
+        if type(self.arr) == numpy.ndarray:
+            self.arr = list(map(tuple, self.arr))
         clusters = dict(zip(self.arr, start_none))
         self.clusters = clusters
 
@@ -26,9 +28,9 @@ class DBSCAN:
 
         cluster_count = 0
         for i in self.arr:
-            print(i)
+            # print(i)
             if clusters[i] == None:
-                print(i)
+                # print(i)
                 # break
                 neighbors = self.cluster_finder(i, self.arr, self.dist)
                 print(neighbors)
@@ -39,7 +41,7 @@ class DBSCAN:
                 else:
                     neighbors.remove(i)
                     for j in neighbors:
-                        print(j)
+                        # print(j)
                         if clusters[j] == -1:
                             clusters[j] = cluster_count
                         if clusters[j] == None:
@@ -51,8 +53,8 @@ class DBSCAN:
                                     neighbors.append(item)
                                 # print(iterneighbors)
                                 # print(new_neighbors)
-                    print(neighbors)
-                    print(clusters[j])
+                    # print(neighbors)
+                    # print(clusters[j])
                     clusters[i] = cluster_count
                     cluster_count += 1
 
