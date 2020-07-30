@@ -1,7 +1,7 @@
-import DBSCAN
+import dbscan
 from sklearn import cluster
 
-d = DBSCAN.DBSCAN()
+d = dbscan.Dbscan()
 arr1 = [(1,2),(2,3),(3,4),(4,5)]
 arr2 = [(1,2),(2,2),(1,1), (2,1),(3,4),(4,5), (4,4)]
 
