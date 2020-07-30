@@ -28,11 +28,21 @@ class DBSCAN:
 
                 if len(neighbors) < minp:
                     clusters[i]  = -1
+                    print(clusters[i])
                 else:
+                    neighbors.remove(i)
                     cluster_count += 1
-                    for i in neighbors:
-                        if clusters[i] == None:
-                            clusters[i] = cluster_count
+                    for j in neighbors:
+                        if clusters[j] == -1:
+                            clusters[j] = cluster_count
+                        if clusters[j] == None:
+                            clusters[j] = cluster_count
+                            iterneighbors = self.cluster_finder(j, self.arr, self.dist)
+                            if len(iterneighbors) >= minp:
+                                neighbors.union(iterneighbors)
+                        print(clusters[j])
+                    clusters[i] = cluster_count
+
 
 
         # print(neighbors)
@@ -41,7 +51,7 @@ class DBSCAN:
 
     def cluster_finder(self, point, arr, dist):
         cdist = distance.euclidean
-        neighbors = []
+        neighbors = set([])
         i = numpy.asarray(point)
         # print(i)
         # print(i.shape)
@@ -49,7 +59,7 @@ class DBSCAN:
             jarray = numpy.asarray(j)
             # print(j)
             if cdist(i,jarray) <= dist:
-                neighbors.append(j)
+                neighbors.add(j)
         return neighbors
 
 
@@ -58,5 +68,5 @@ d = DBSCAN()
 arr1 = [(1,2),(2,3),(3,4),(4,5)]
 arr2 = [(1,2),(2,2),(1,1), (2,1),(3,4),(4,5), (4,4)]
 
-d.fit(arr2, 1.8, 2)
+d.fit(arr2, 3, 4)
 # print(arr1)
