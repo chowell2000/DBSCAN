@@ -3,8 +3,13 @@ import numpy
 from scipy.spatial import distance
 
 class DBSCAN:
-    def __init__(self, arr = None, dist = 0, minp = 0, item_len =0):
+    def __init__(self, arr = None, dist = 0, minp = 0, item_len =0,
+                 labels_ = None, clusters = None):
         return
+
+    # # def labels_(self):
+    #     labels = [clusters[i] for i in clusters.keys()]
+    #     return labels
 
     def fit(self, arr, dist, minp):
         self.arr = arr
@@ -14,12 +19,14 @@ class DBSCAN:
 
         start_none = [None] * len(self.arr)
         clusters = dict(zip(self.arr, start_none))
+        self.clusters = clusters
 
         print(clusters)
 
 
         cluster_count = 0
         for i in self.arr:
+            print(i)
             if clusters[i] == None:
                 print(i)
                 # break
@@ -31,27 +38,38 @@ class DBSCAN:
                     print(clusters[i])
                 else:
                     neighbors.remove(i)
-                    cluster_count += 1
                     for j in neighbors:
+                        print(j)
                         if clusters[j] == -1:
                             clusters[j] = cluster_count
                         if clusters[j] == None:
                             clusters[j] = cluster_count
                             iterneighbors = self.cluster_finder(j, self.arr, self.dist)
                             if len(iterneighbors) >= minp:
-                                neighbors.union(iterneighbors)
-                        print(clusters[j])
+                                new_neighbors = list(set(iterneighbors) - set(neighbors))
+                                for item in new_neighbors:
+                                    neighbors.append(item)
+                                # print(iterneighbors)
+                                # print(new_neighbors)
+                    print(neighbors)
+                    print(clusters[j])
                     clusters[i] = cluster_count
+                    cluster_count += 1
+
 
 
 
         # print(neighbors)
-        print(clusters)
+
+        self.labels_ = numpy.asarray([self.clusters[i] for i in self.clusters.keys()])
+
+
+        print(self.clusters)
 
 
     def cluster_finder(self, point, arr, dist):
         cdist = distance.euclidean
-        neighbors = set([])
+        neighbors = []
         i = numpy.asarray(point)
         # print(i)
         # print(i.shape)
@@ -59,14 +77,14 @@ class DBSCAN:
             jarray = numpy.asarray(j)
             # print(j)
             if cdist(i,jarray) <= dist:
-                neighbors.add(j)
+                neighbors.append(j)
         return neighbors
 
 
-
-d = DBSCAN()
-arr1 = [(1,2),(2,3),(3,4),(4,5)]
-arr2 = [(1,2),(2,2),(1,1), (2,1),(3,4),(4,5), (4,4)]
-
-d.fit(arr2, 3, 4)
+#
+# d = DBSCAN()
+# arr1 = [(1,2),(2,3),(3,4),(4,5)]
+# arr2 = [(1,2),(2,2),(1,1), (2,1),(3,4),(4,5), (4,4)]
+#
+# d.fit(arr2, 3, 4)
 # print(arr1)
