@@ -1,7 +1,9 @@
 # DBSCAN
 
 Python DBSCAN module with DBSCAN* and ST-DBSCAN
-DBSCAN is well-known clustering algorithm. Given a minimum number of neighbors and a distance, DBSCAN finds points that have at least that many neighbors within the distance, marking them as clusters. Points that have fewer than the minimum neighbors but have 
+
+DBSCAN is well-known clustering algorithm. Given a minimum number of neighbors and a distance, DBSCAN finds points that have at least that many neighbors within the distance, marking them as clusters. Points that have fewer than the minimum neighbors are noise, unless they are neighbors with a core point, in which case it is in that cluster.
+
 Given a number N of minimum neighbors and a distance d, the algorithm proceeds as follows:
 
   If a point has < N neighbors within d, label the point as Noise (implemented as -1)
