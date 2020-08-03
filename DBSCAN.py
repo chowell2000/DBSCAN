@@ -3,9 +3,16 @@ import numpy
 from scipy.spatial import distance
 
 class Dbscan:
-    def __init__(self, arr = None, dist = 0, minp = 0, item_len =0,
+    def __init__(self, x= True, arr = None, dist = 0, minp = 0, item_len =0,
                  labels_ = None, clusters = None):
-        return
+        self.arr = arr
+        self.arr = arr
+        self.dist = dist
+        self.minp = minp
+        self.x = x
+        self.clusters = clusters
+        self.labels_ = labels_
+        self.core_sample_indices_ = []
 
     # # def labels_(self):
     #     labels = [clusters[i] for i in clusters.keys()]
@@ -23,7 +30,7 @@ class Dbscan:
         clusters = dict(zip(self.arr, start_none))
         self.clusters = clusters
 
-        print(clusters)
+        # print(clusters)
 
 
         cluster_count = 0
@@ -42,7 +49,7 @@ class Dbscan:
                     neighbors.remove(i)
                     for j in neighbors:
                         # print(j)
-                        if clusters[j] == -1:
+                        if ((clusters[j] == -1) & (self.x == False)):
                             clusters[j] = cluster_count
                         if clusters[j] == None:
                             clusters[j] = cluster_count
@@ -64,7 +71,7 @@ class Dbscan:
         # print(neighbors)
 
         self.labels_ = numpy.asarray([self.clusters[i] for i in self.clusters.keys()])
-
+        self.core_sample_indices_ = []
 
         print(self.clusters)
 

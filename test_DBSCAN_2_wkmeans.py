@@ -14,21 +14,21 @@ from sklearn.preprocessing import StandardScaler
 # centers = [[2, 1], [-2, -1], [1, -2], ]
 
 random.seed(42)
-centers = [(random.randrange(-20,20, ), random.randrange(-20,20)) for i in range(13)]
-X, labels_true = make_blobs(n_samples=500, centers=centers, cluster_std=1,
+centers = [(random.randrange(-20,20 ), random.randrange(-20,20)) for i in range(10)]
+X, labels_true = make_blobs(n_samples=1500, centers=centers, cluster_std=1,
                             random_state=42)
 
-#
-# rng = np.random.RandomState(42)
-# transformation = rng.normal(size=(2, 2))
-# X = np.dot(X, transformation)
-# X = StandardScaler().fit_transform(X)
+
+rng = np.random.RandomState(69)
+transformation = rng.normal(size=(2, 2))
+X = np.dot(X, transformation)
+X = StandardScaler().fit_transform(X)
 
 # print(X)
 # #############################################################################
 # Compute DBSCAN
 d = dbscan.Dbscan(x = False)
-d.fit(X, 1.2, 6)
+d.fit(X, .1, 7)
 db = DBSCAN(eps=1.2, min_samples=6).fit(X)
 core_samples_mask = np.zeros_like(d.labels_, dtype=bool)
 core_samples_mask[db.core_sample_indices_] = True
@@ -61,6 +61,25 @@ print(d.x)
 # #############################################################################
 # Plot result
 import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+# cluster the data into five clusters
+kmeans = KMeans(n_clusters=10)
+kmeans.fit(X)
+y_pred = kmeans.predict(X)
+# plot the cluster assignments and cluster centers
+plt.scatter(X[:, 0], X[:, 1], c=y_pred, cmap="plasma")
+plt.scatter(kmeans.cluster_centers_[:, 0],
+            kmeans.cluster_centers_[:, 1],
+            marker='^',
+            c=[0, 1, 2, 3, 4
+            , 5, 6, 7, 8, 9
+            ],
+            s=100,
+            linewidth=2,
+            cmap="plasma")
+plt.xlabel("Feature 0")
+plt.ylabel("Feature 1")
+plt.show()
 
 # Black removed and is used for noise instead.
 unique_labels = set(labels)

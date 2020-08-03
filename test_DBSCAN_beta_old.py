@@ -12,24 +12,18 @@ from sklearn.preprocessing import StandardScaler
 # #############################################################################
 # Generate sample data
 # centers = [[2, 1], [-2, -1], [1, -2], ]
+centers = [(random.randrange(-20,20), random.randrange(-20,20)) for i in range(15)]
+X, labels_true = make_blobs(n_samples=2500, centers=centers, cluster_std=1,
+                            random_state=0)
 
-random.seed(42)
-centers = [(random.randrange(-20,20, ), random.randrange(-20,20)) for i in range(13)]
-X, labels_true = make_blobs(n_samples=500, centers=centers, cluster_std=1,
-                            random_state=42)
-
-#
-# rng = np.random.RandomState(42)
-# transformation = rng.normal(size=(2, 2))
-# X = np.dot(X, transformation)
-# X = StandardScaler().fit_transform(X)
+X = StandardScaler().fit_transform(X)
 
 # print(X)
 # #############################################################################
 # Compute DBSCAN
 d = dbscan.Dbscan(x = False)
-d.fit(X, 1.2, 6)
-db = DBSCAN(eps=1.2, min_samples=6).fit(X)
+d.fit(X, 0.05, 10)
+db = DBSCAN(eps=0.05, min_samples=10).fit(X)
 core_samples_mask = np.zeros_like(d.labels_, dtype=bool)
 core_samples_mask[db.core_sample_indices_] = True
 labels = d.labels_
@@ -41,17 +35,17 @@ n_noise_ = list(labels).count(-1)
 
 print('Estimated number of clusters: %d' % n_clusters_)
 print('Estimated number of noise points: %d' % n_noise_)
-# print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels_true, labels))
-# print("Completeness: %0.3f" % metrics.completeness_score(labels_true, labels))
-# print("V-measure: %0.3f" % metrics.v_measure_score(labels_true, labels))
-# print("Adjusted Rand Index: %0.3f"
-#       % metrics.adjusted_rand_score(labels_true, labels))
-# print("Adjusted Mutual Information: %0.3f"
-#       % metrics.adjusted_mutual_info_score(labels_true, labels))
-# print("Silhouette Coefficient: %0.3f"
-#       % metrics.silhouette_score(X, labels))
-# print(db.core_sample_indices_)
-# print(db.labels_ == d.labels_)
+print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels_true, labels))
+print("Completeness: %0.3f" % metrics.completeness_score(labels_true, labels))
+print("V-measure: %0.3f" % metrics.v_measure_score(labels_true, labels))
+print("Adjusted Rand Index: %0.3f"
+      % metrics.adjusted_rand_score(labels_true, labels))
+print("Adjusted Mutual Information: %0.3f"
+      % metrics.adjusted_mutual_info_score(labels_true, labels))
+print("Silhouette Coefficient: %0.3f"
+      % metrics.silhouette_score(X, labels))
+print(db.core_sample_indices_)
+print(db.labels_ == d.labels_)
 if (db.labels_ == d.labels_).all():
     print('lists the same')
 else:
